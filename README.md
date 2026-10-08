@@ -23,3 +23,10 @@ Python's standard `base64.urlsafe_b64encode` still emits `=` padding characters.
 ## Edge cases
 
 Decoding input with invalid Base64 characters raises a `binascii.Error`. Leading and trailing whitespace in the input string is stripped before decoding. Non-ASCII characters in a `str` input raise a `UnicodeEncodeError`.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
